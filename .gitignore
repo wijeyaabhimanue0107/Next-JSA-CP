@@ -1,4 +1,22 @@
-node_modules/
-dist/
-.env
-package-lock.json
+/node_modules/
+/.next/
+/out/
+/build/
+/dist/
+/coverage/
+/.vercel/
+
+# Environment files
+.env*
+!.env.example
+
+# Package manager and runtime logs
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Local and generated files
+.DS_Store
+Thumbs.db
+*.tsbuildinfo
+next-env.d.ts
