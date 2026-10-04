@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 106, "column": 0}, "map": {"version":3,"sources":["file:///D:/OUSL/jsa-play/proxy.js"],"sourcesContent":["import { NextResponse } from 'next/server';\r\n\r\nexport function proxy(request) {\r\n  const { pathname } = request.nextUrl;\r\n  if (pathname === '/admin/login' || pathname === '/admin/signup') return NextResponse.next();\r\n  if (!request.cookies.has('jsa_session')) {\r\n    const loginUrl = new URL('/admin/login', request.url);\r\n    loginUrl.searchParams.set('next', pathname);\r\n    return NextResponse.redirect(loginUrl);\r\n  }\r\n  return NextResponse.next();\r\n}\r\n\r\nexport const config = { matcher: ['/admin/:path*'] };"],"names":["proxy","request","pathname","nextUrl","next","cookies","has","loginUrl","URL","url","searchParams","set","redirect","config","matcher"],"mappings":";;;;;;AAAA;;AAEO,SAASA,MAAMC,OAAO;IAC3B,MAAM,EAAEC,QAAQ,EAAE,GAAGD,QAAQE,OAAO;IACpC,IAAID,aAAa,kBAAkBA,aAAa,iBAAiB,OAAO,8IAAY,CAACE,IAAI;IACzF,IAAI,CAACH,QAAQI,OAAO,CAACC,GAAG,CAAC,gBAAgB;QACvC,MAAMC,WAAW,IAAIC,IAAI,gBAAgBP,QAAQQ,GAAG;QACpDF,SAASG,YAAY,CAACC,GAAG,CAAC,QAAQT;QAClC,OAAO,8IAAY,CAACU,QAAQ,CAACL;IAC/B;IACA,OAAO,8IAAY,CAACH,IAAI;AAC1B;AAEO,MAAMS,SAAS;IAAEC,SAAS;QAAC;KAAgB;AAAC"}}]
+}
