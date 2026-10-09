@@ -1,8 +1,4 @@
-{"timestamp":"00:00:02.848","source":"Server","level":"LOG","message":""}
-{"timestamp":"00:00:02.850","source":"Server","level":"LOG","message":"✓ Generated AGENTS.md and CLAUDE.md for AI agents. Set `agentRules: false` in next.config to disable."}
-{"timestamp":"00:01:54.766","source":"Browser","level":"INFO","message":"Download the React DevTools for a better development experience: https://react.dev/link/react-devtools"}
-{"timestamp":"00:02:42.820","source":"Browser","level":"INFO","message":"Download the React DevTools for a better development experience: https://react.dev/link/react-devtools"}
-{"timestamp":"00:02:43.792","source":"Browser","level":"INFO","message":"Download the React DevTools for a better development experience: https://react.dev/link/react-devtools"}
-{"timestamp":"00:03:37.037","source":"Browser","level":"INFO","message":"Download the React DevTools for a better development experience: https://react.dev/link/react-devtools"}
-{"timestamp":"00:04:02.671","source":"Server","level":"LOG","message":"✓ Compiled in 73ms"}
-{"timestamp":"00:04:13.595","source":"Browser","level":"INFO","message":"Download the React DevTools for a better development experience: https://react.dev/link/react-devtools"}
+{"timestamp":"00:00:15.102","source":"Server","level":"WARN","message":"⚠ Slow filesystem detected. The benchmark took 228ms. If \\\\?\\D:\\OUSL\\jsa-play\\.next\\dev is a network drive, consider moving it to a local folder.\nSee more: https://nextjs.org/docs/app/guides/local-development"}
+{"timestamp":"00:00:21.724","source":"Server","level":"LOG","message":""}
+{"timestamp":"00:00:25.339","source":"Browser","level":"INFO","message":"Download the React DevTools for a better development experience: https://react.dev/link/react-devtools"}
+{"timestamp":"00:08:11.385","source":"Browser","level":"INFO","message":"Download the React DevTools for a better development experience: https://react.dev/link/react-devtools"}

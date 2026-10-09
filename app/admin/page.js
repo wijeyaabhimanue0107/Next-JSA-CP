@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useStore, fmt } from '../../lib/store';
-import { apiRequest } from '../../lib/api';
+import { getCurrentAdmin, logoutAdmin } from '../../lib/admin-auth';
 import SlotGrid from '../../components/SlotGrid';
 
 const TABS = ['Overview', 'Bookings', 'Schedule', 'Facilities', 'Audit log'];
@@ -19,7 +19,7 @@ export default function Admin() {
 
   useEffect(() => {
     let active = true;
-    apiRequest('/api/admin/me')
+    getCurrentAdmin()
       .then((admin) => { if (active) setUser(admin?.username || 'JSA Management'); })
       .catch(() => { if (active) r.replace('/admin/login'); })
       .finally(() => { if (active) setAuthChecked(true); });
@@ -72,7 +72,7 @@ export default function Admin() {
     <>
       <div className="row">
         <h1>Management dashboard</h1>
-        <span>{user} <button className="link" onClick={async () => { try { await apiRequest('/api/admin/logout', { method: 'POST' }); } finally { r.replace('/admin/login'); } }}>Log out</button></span>
+        <span>{user} <button className="link" onClick={async () => { try { await logoutAdmin(); } finally { r.replace('/admin/login'); } }}>Log out</button></span>
       </div>
       <div className="tabs" role="tablist">
         {TABS.map((t) => <button key={t} role="tab" aria-selected={tab === t} className={tab === t ? 'on' : ''} onClick={() => setTab(t)}>{t}</button>)}
