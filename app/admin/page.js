@@ -25,7 +25,13 @@ export default function Admin() {
   const [tab, setTab] = useState('Overview');
   const [fid, setFid] = useState('foot');
   const [date, setDate] = useState('');
-  const [nf, setNf] = useState({ name: '', sport: 'Badminton', rate: '' });
+  
+const [customerForm, setCustomerForm] = useState({
+  name: '',
+  phone: '',
+  email: '',
+});
+const [editingCustomerId, setEditingCustomerId] = useState(null);
 
   useEffect(() => {
     let active = true;
@@ -71,6 +77,75 @@ export default function Admin() {
     setNf({ name: '', sport: 'Badminton', rate: '' });
   }
 
+  
+function saveCustomer(e) {
+  e.preventDefault();
+
+  const name = customerForm.name.trim();
+  const phone = customerForm.phone.trim();
+  const email = customerForm.email.trim();
+
+  if (!name || !phone) {
+    alert('Please enter the customer name and phone number.');
+    return;
+  }
+
+  update((d) => {
+    if (!d.customers) d.customers = [];
+
+    if (editingCustomerId) {
+      const customer = d.customers.find(
+        (c) => c.id === editingCustomerId
+      );
+
+      if (customer) {
+        customer.name = name;
+        customer.phone = phone;
+        customer.email = email;
+      }
+    } else {
+      d.customers.push({
+        id: 'CUS-' + Date.now(),
+        name,
+        phone,
+        email,
+      });
+    }
+
+    return d;
+  }, editingCustomerId ? `Updated customer ${name}` : `Added customer ${name}`);
+
+  setCustomerForm({ name: '', phone: '', email: '' });
+  setEditingCustomerId(null);
+}
+
+function editCustomer(customer) {
+  setCustomerForm({
+    name: customer.name || '',
+    phone: customer.phone || '',
+    email: customer.email || '',
+  });
+
+  setEditingCustomerId(customer.id);
+}
+
+function deleteCustomer(customer) {
+  if (!confirm(`Delete customer ${customer.name}?`)) return;
+
+  update((d) => {
+    d.customers = (d.customers || []).filter(
+      (c) => c.id !== customer.id
+    );
+    return d;
+  }, `Deleted customer ${customer.name}`);
+
+  if (editingCustomerId === customer.id) {
+    setCustomerForm({ name: '', phone: '', email: '' });
+    setEditingCustomerId(null);
+  }
+}
+
+
   const editRate = (x) => {
     const v = prompt(`New hourly rate for ${x.name} (LKR)`, x.rate);
     if (v && +v > 0) update((d) => { d.facilities.find((y) => y.id === x.id).rate = +v; return d; }, `Rate changed: ${x.name} to LKR ${+v}`);
@@ -96,15 +171,241 @@ export default function Admin() {
         </div>
       )}
 
-      {tab === 'Bookings' && (
-        <table className="tbl"><thead><tr><th>Ref</th><th>Facility</th><th>When</th><th>Customer</th><th>Status</th><th>Actions</th></tr></thead><tbody>
-          {db.bookings.length === 0 && <tr><td colSpan="6" className="muted">No booking requests yet. Send one from the player page.</td></tr>}
-          {db.bookings.map((b) => (
-            <tr key={b.id}><td>{b.id}</td><td>{nameOf(b.facilityId)}</td><td>{b.date} {fmt(b.hour)}</td><td>{b.name}<br />{b.phone}{b.email && <div className="small">{b.email}</div>}{b.note && <p className="small muted">{b.note}</p>}</td><td>{b.status}</td>
-              <td>{b.status === 'Pending' && <><button className="btn sm" onClick={() => setStatus(b, 'Confirmed')}>Confirm</button> <button className="btn sm red" onClick={() => setStatus(b, 'Rejected')}>Reject</button></>}</td></tr>
-          ))}
-        </tbody></table>
+      ```jsx
+
+
+
+
+{tab === 'Requests' && (
+  <>
+    <h2>Booking requests</h2>
+    <p className="muted">
+      Review pending requests and approve or reject them.
+    </p>
+
+    <table className="tbl">
+      <thead>
+        <tr>
+          <th>Reference</th>
+          <th>Facility</th>
+          <th>Date &amp; time</th>
+          <th>Customer</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {pending.length === 0 ? (
+          <tr>
+            <td colSpan="6" className="muted">
+              No pending requests.
+            </td>
+          </tr>
+        ) : (
+          pending.map((b) => (
+            <tr key={b.id}>
+              <td>{b.id}</td>
+              <td>{nameOf(b.facilityId)}</td>
+              <td>{b.date} {fmt(b.hour)}</td>
+              <td>
+                {b.name}
+                <br />
+                {b.phone}
+                {b.email && <div className="small">{b.email}</div>}
+              </td>
+              <td>{b.status}</td>
+              <td>
+                <button
+                  className="btn sm"
+                  onClick={() => {
+                    if (confirm(`Approve booking ${b.id}?`)) {
+                      setStatus(b, 'Confirmed');
+                    }
+                  }}
+                >
+                  Approve
+                </button>{' '}
+                <button
+                  className="btn sm red"
+                  onClick={() => {
+                    if (confirm(`Reject booking ${b.id}?`)) {
+                      setStatus(b, 'Rejected');
+                    }
+                  }}
+                >
+                  Reject
+                </button>
+              </td>
+            </tr>
+          ))
+        )}
+      </tbody>
+    </table>
+  </>
+)}
+
+```
+{tab === 'Customers' && (
+  <>
+    <h2>Customer management</h2>
+
+    <form className="bar" onSubmit={saveCustomer}>
+      <input
+        placeholder="Customer name"
+        value={customerForm.name}
+        onChange={(e) =>
+          setCustomerForm({ ...customerForm, name: e.target.value })
+        }
+        required
+      />
+
+      <input
+        placeholder="Phone number"
+        value={customerForm.phone}
+        onChange={(e) =>
+          setCustomerForm({ ...customerForm, phone: e.target.value })
+        }
+        required
+      />
+
+      <input
+        type="email"
+        placeholder="Email (optional)"
+        value={customerForm.email}
+        onChange={(e) =>
+          setCustomerForm({ ...customerForm, email: e.target.value })
+        }
+      />
+
+      <button className="btn" type="submit">
+        {editingCustomerId ? 'Save changes' : 'Add customer'}
+      </button>
+
+      {editingCustomerId && (
+        <button
+          className="btn"
+          type="button"
+          onClick={() => {
+            setCustomerForm({ name: '', phone: '', email: '' });
+            setEditingCustomerId(null);
+          }}
+        >
+          Cancel
+        </button>
       )}
+    </form>
+
+    <table className="tbl">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Email</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {(db.customers || []).length === 0 ? (
+          <tr>
+            <td colSpan="4" className="muted">
+              No customers added yet.
+            </td>
+          </tr>
+        ) : (
+          db.customers.map((customer) => (
+            <tr key={customer.id}>
+              <td>{customer.name}</td>
+              <td>{customer.phone}</td>
+              <td>{customer.email || '—'}</td>
+              <td>
+                <button
+                  type="button"
+                  className="btn sm"
+                  onClick={() => editCustomer(customer)}
+                >
+                  Edit
+                </button>{' '}
+                <button
+                  type="button"
+                  className="btn sm red"
+                  onClick={() => deleteCustomer(customer)}
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))
+        )}
+      </tbody>
+    </table>
+  </>
+)}
+
+
+
+      {tab === 'Bookings' && (
+        <table className="tbl">
+          <thead>
+            <tr>
+              <th>Ref</th>
+              <th>Facility</th>
+              <th>When</th>
+              <th>Customer</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {db.bookings.length === 0 ? (
+              <tr>
+                <td colSpan="6" className="muted">
+                  No bookings yet.
+                </td>
+              </tr>
+            ) : (
+              db.bookings.map((b) => (
+                <tr key={b.id}>
+                  <td>{b.id}</td>
+                  <td>{nameOf(b.facilityId)}</td>
+                  <td>{b.date} {fmt(b.hour)}</td>
+                  <td>
+                    {b.name}
+                    <br />
+                    {b.phone}
+                    {b.email && (
+                      <div className="small">{b.email}</div>
+                    )}
+                    {b.note && (
+                      <p className="small muted">{b.note}</p>
+                    )}
+                  </td>
+                  <td>{b.status}</td>
+                  <td>
+                    {b.status === 'Pending' && (
+                      <>
+                        <button
+                          className="btn sm"
+                          onClick={() => setStatus(b, 'Confirmed')}
+                        >
+                          Confirm
+                        </button>{' '}
+                        <button
+                          className="btn sm red"
+                          onClick={() => setStatus(b, 'Rejected')}
+                        >
+                          Reject
+                        </button>
+                      </>
+                    )}
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      )}
+
 
       {tab === 'Schedule' && f && (
         <>
