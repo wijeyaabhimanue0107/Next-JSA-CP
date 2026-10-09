@@ -5,7 +5,17 @@ import { useStore, fmt } from '../../lib/store';
 import { apiRequest } from '../../lib/api';
 import SlotGrid from '../../components/SlotGrid';
 
-const TABS = ['Overview', 'Bookings', 'Schedule', 'Facilities', 'Audit log'];
+
+const TABS = [
+  'Overview',
+  'Requests',
+  'Customers',
+  'Bookings',
+  'Schedule',
+  'Facilities',
+  'Audit log',
+];
+
 
 export default function Admin() {
   const r = useRouter();
