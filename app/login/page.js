@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { apiRequest } from '../../lib/api';
+import { loginAdmin } from '../../lib/admin-auth';
 
 export default function Login() {
   const r = useRouter();
@@ -18,7 +18,7 @@ export default function Login() {
     if (!u.trim() || !p) return setErr('Enter your username and password.');
     setBusy(true);
     try {
-      await apiRequest('/api/admin/login', { method: 'POST', body: JSON.stringify({ username: u.trim(), password: p }) });
+      await loginAdmin(u.trim(), p);
       r.replace('/admin');
     } catch (error) {
       setErr(error.status === 401 ? 'Username or password is incorrect.' : 'Admin sign-in is unavailable. Please try again.');
@@ -31,6 +31,7 @@ export default function Login() {
     <form className="card login" onSubmit={submit} noValidate>
       <h1>Admin login</h1>
       <p className="muted">For Jaffna Sports Academy management.</p>
+      {process.env.NODE_ENV !== 'production' && <p className="muted small">Temporary development login: Admin / Admin</p>}
       <label>Username<input value={u} onChange={(e) => setU(e.target.value)} autoComplete="username" /></label>
       <label>Password
         <span className="pw">

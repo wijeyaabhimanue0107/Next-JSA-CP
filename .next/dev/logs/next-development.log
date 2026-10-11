@@ -1,5 +1,20 @@
-{"timestamp":"00:00:02.350","source":"Server","level":"LOG","message":""}
-{"timestamp":"00:00:06.655","source":"Browser","level":"INFO","message":"Download the React DevTools for a better development experience: https://react.dev/link/react-devtools"}
-{"timestamp":"00:02:38.683","source":"Browser","level":"INFO","message":"Download the React DevTools for a better development experience: https://react.dev/link/react-devtools"}
-{"timestamp":"00:02:45.132","source":"Browser","level":"INFO","message":"Download the React DevTools for a better development experience: https://react.dev/link/react-devtools"}
-{"timestamp":"00:02:50.814","source":"Browser","level":"INFO","message":"Download the React DevTools for a better development experience: https://react.dev/link/react-devtools"}
+{"timestamp":"00:00:15.102","source":"Server","level":"WARN","message":"⚠ Slow filesystem detected. The benchmark took 228ms. If \\\\?\\D:\\OUSL\\jsa-play\\.next\\dev is a network drive, consider moving it to a local folder.\nSee more: https://nextjs.org/docs/app/guides/local-development"}
+{"timestamp":"00:00:21.724","source":"Server","level":"LOG","message":""}
+{"timestamp":"00:00:25.339","source":"Browser","level":"INFO","message":"Download the React DevTools for a better development experience: https://react.dev/link/react-devtools"}
+{"timestamp":"00:08:11.385","source":"Browser","level":"INFO","message":"Download the React DevTools for a better development experience: https://react.dev/link/react-devtools"}
+{"timestamp":"00:12:25.972","source":"Server","level":"LOG","message":"✓ Compiled in 325ms"}
+{"timestamp":"00:12:26.226","source":"Server","level":"ERROR","message":"⨯ SyntaxError: Expected double-quoted property name in JSON at position 103 (line 4 column 1)"}
+{"timestamp":"00:12:29.340","source":"Server","level":"ERROR","message":"⨯ SyntaxError: Expected property name or '}' in JSON at position 102 (line 7 column 1)"}
+{"timestamp":"00:12:29.658","source":"Server","level":"ERROR","message":"SyntaxError: Expected double-quoted property name in JSON at position 103 (line 4 column 1)"}
+{"timestamp":"00:12:29.687","source":"Server","level":"ERROR","message":"⨯ SyntaxError: Expected property name or '}' in JSON at position 102 (line 7 column 1)"}
+{"timestamp":"00:12:29.720","source":"Server","level":"ERROR","message":"SyntaxError: Expected property name or '}' in JSON at position 102 (line 7 column 1)"}
+{"timestamp":"00:12:29.793","source":"Server","level":"ERROR","message":"⨯ SyntaxError: Expected double-quoted property name in JSON at position 103 (line 4 column 1)"}
+{"timestamp":"00:12:29.837","source":"Server","level":"ERROR","message":"⨯ SyntaxError: Expected property name or '}' in JSON at position 102 (line 7 column 1)"}
+{"timestamp":"00:12:29.876","source":"Server","level":"ERROR","message":"⨯ SyntaxError: Expected double-quoted property name in JSON at position 103 (line 4 column 1)"}
+{"timestamp":"00:12:29.889","source":"Server","level":"ERROR","message":"SyntaxError: Expected double-quoted property name in JSON at position 103 (line 4 column 1)"}
+{"timestamp":"00:12:29.922","source":"Server","level":"ERROR","message":"⨯ SyntaxError: Expected property name or '}' in JSON at position 102 (line 7 column 1)"}
+{"timestamp":"00:12:29.944","source":"Server","level":"ERROR","message":"⨯ SyntaxError: Expected property name or '}' in JSON at position 102 (line 7 column 1)"}
+{"timestamp":"00:12:29.968","source":"Server","level":"ERROR","message":"SyntaxError: Expected double-quoted property name in JSON at position 103 (line 4 column 1)"}
+{"timestamp":"00:12:29.993","source":"Server","level":"ERROR","message":"SyntaxError: Expected property name or '}' in JSON at position 102 (line 7 column 1)"}
+{"timestamp":"00:12:30.011","source":"Server","level":"ERROR","message":"⨯ SyntaxError: Expected property name or '}' in JSON at position 102 (line 7 column 1)"}
+{"timestamp":"00:12:30.043","source":"Server","level":"ERROR","message":"SyntaxError: Expected property name or '}' in JSON at position 102 (line 7 column 1)"}
