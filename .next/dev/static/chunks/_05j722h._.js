@@ -411,6 +411,7 @@ const seed = {
         }
     ],
     bookings: [],
+    customers: [],
     audit: []
 };
 function slotState(f, date, hour, bookings) {
@@ -445,8 +446,17 @@ function useStore() {
         "useStore.useEffect": ()=>{
             try {
                 const s = localStorage.getItem('jsa_db');
-                if (s) setDb(JSON.parse(s));
-            } catch  {}
+                if (s) {
+                    const saved = JSON.parse(s);
+                    setDb({
+                        ...seed,
+                        ...saved,
+                        customers: saved.customers || []
+                    });
+                }
+            } catch (error) {
+                console.error('Could not load saved data:', error);
+            }
             setReady(true);
         }
     }["useStore.useEffect"], []);
