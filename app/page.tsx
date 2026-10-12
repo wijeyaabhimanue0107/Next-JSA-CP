@@ -1,69 +1,159 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+
+type Slot = {
+  time: string;
+  status: "Available" | "Booked" | "Maintenance";
+};
+
+type Facility = {
+  name: string;
+  sport: string;
+  rate: string;
+  description: string;
+  ground: string;
+  slots: Slot[];
+};
+
+const slots = ["06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
+
+const facilities: Facility[] = [
+  {
+    name: "Badminton Court 1",
+    sport: "Badminton",
+    rate: "LKR 2,500 / hour",
+    description: "Jaffna Sports Academy, Jaffna",
+    ground: "Independent court",
+    slots: slots.map((time, index) => ({ time, status: index === 3 || index === 9 ? "Booked" : "Available" })),
+  },
+  {
+    name: "Cricket Net 1",
+    sport: "Cricket",
+    rate: "LKR 3,000 / hour",
+    description: "Jaffna Sports Academy, Jaffna",
+    ground: "Shared turf · book any cricket net for this time slot",
+    slots: slots.map((time, index) => ({ time, status: index === 5 ? "Booked" : "Available" })),
+  },
+  {
+    name: "Football Play Area",
+    sport: "Football",
+    rate: "LKR 4,000 / hour",
+    description: "Jaffna Sports Academy, Jaffna",
+    ground: "Shared turf · football bookings reserve the cricket nets",
+    slots: slots.map((time, index) => ({ time, status: index === 2 || index === 10 ? "Booked" : "Available" })),
+  },
+];
 
 export default function Home() {
+  const [sport, setSport] = useState("All");
+  const [date, setDate] = useState("2026-10-09");
+  const [selected, setSelected] = useState<{ facility: Facility; time: string } | null>(null);
+  const [notice, setNotice] = useState("");
+
+  const visibleFacilities = sport === "All" ? facilities : facilities.filter((facility) => facility.sport === sport);
+
+  function chooseSlot(facility: Facility, slot: Slot) {
+    if (slot.status !== "Available") return;
+    setSelected({ facility, time: slot.time });
+    setNotice("");
+  }
+
+  function submitBooking() {
+    setNotice(`Booking request for ${selected?.facility.name} at ${selected?.time} has been submitted.`);
+    setSelected(null);
+  }
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="site-shell">
+      <header className="site-header">
+        <Link className="brand" href="/">JSA <span>Play</span></Link>
+        <nav className="site-nav" aria-label="Main navigation">
+          <a className="active" href="#availability">Book a slot</a>
+          <Link href="/admin">Admin login</Link>
+        </nav>
+      </header>
+
+      <section className="hero" id="availability">
+        <div className="eyebrow">JAFFNA SPORTS ACADEMY · JAFFNA</div>
+        <h1>Find your next game.</h1>
+        <p>Pick a sport and date, choose a free hour, and send a booking request. No account needed.</p>
+
+        <div className="search-controls" aria-label="Availability filters">
+          <label>
+            <span>Sport</span>
+            <select value={sport} onChange={(event) => setSport(event.target.value)}>
+              <option>All</option>
+              <option>Badminton</option>
+              <option>Cricket</option>
+              <option>Football</option>
+            </select>
+          </label>
+          <label>
+            <span>Date</span>
+            <input type="date" value={date} onChange={(event) => setDate(event.target.value)} />
+          </label>
+          <button className="primary-button" type="button" onClick={() => setNotice(`Showing availability for ${date}.`)}>
+            Check availability
+          </button>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        {notice && <div className="notice" role="status">{notice}</div>}
+      </section>
+
+      <section className="facility-list" aria-label="Facilities">
+        {visibleFacilities.map((facility) => (
+          <article className="facility-card" key={facility.name}>
+            <div className="facility-card-top">
+              <div>
+                <h2>{facility.name}</h2>
+                <p className="facility-meta">{facility.rate} · {facility.description}</p>
+                <p className="ground-note">{facility.ground}</p>
+              </div>
+              <div className="facility-links">
+                <a href="https://wa.me/94772234567" target="_blank" rel="noreferrer">WhatsApp · +94 77 223 4567</a>
+                <a href="#details">Facility details</a>
+                <a href="#map">View on map</a>
+              </div>
+            </div>
+            <div className="slot-grid">
+              {facility.slots.map((slot) => (
+                <button
+                  className={`slot ${slot.status.toLowerCase()}`}
+                  disabled={slot.status !== "Available"}
+                  key={slot.time}
+                  onClick={() => chooseSlot(facility, slot)}
+                  type="button"
+                >
+                  <strong>{slot.time}</strong>
+                  <span>{slot.status}</span>
+                </button>
+              ))}
+            </div>
+          </article>
+        ))}
+        {visibleFacilities.length === 0 && <div className="empty-state">No facilities found for this sport.</div>}
+      </section>
+
+      <footer className="site-footer">
+        <span>JSA Play · Simple court booking for everyone</span>
+        <span>Need help? +94 77 223 4567</span>
+      </footer>
+
+      {selected && (
+        <div className="modal-backdrop" role="presentation" onClick={() => setSelected(null)}>
+          <div className="booking-modal" role="dialog" aria-modal="true" aria-labelledby="booking-title" onClick={(event) => event.stopPropagation()}>
+            <button className="modal-close" type="button" onClick={() => setSelected(null)} aria-label="Close booking dialog">×</button>
+            <div className="eyebrow">BOOKING REQUEST</div>
+            <h2 id="booking-title">{selected.facility.name}</h2>
+            <p>{selected.time} · {date} · {selected.facility.rate}</p>
+            <label className="modal-label">Your name<input placeholder="Enter your name" /></label>
+            <label className="modal-label">Phone or email<input placeholder="How can we contact you?" /></label>
+            <button className="primary-button full-width" type="button" onClick={submitBooking}>Send booking request</button>
+            <small>No payment is taken online. The academy will confirm your request.</small>
+          </div>
         </div>
-      </main>
-    </div>
+      )}
+    </main>
   );
 }
