@@ -1,22 +1,36 @@
-/node_modules/
-/.next/
-/out/
-/build/
-/dist/
-/coverage/
-/.vercel/
+# Dependencies
+node_modules/
 
-# Environment files
+# Next.js build output
+.next/
+out/
+
+# Other build and test output
+build/
+dist/
+coverage/
+.turbo/
+.vercel/
+
+# Local environment files
 .env*
 !.env.example
 
-# Package manager and runtime logs
+# Logs and local caches
 npm-debug.log*
 yarn-debug.log*
 pnpm-debug.log*
+*.log
+.eslintcache
 
-# Local and generated files
-.DS_Store
-Thumbs.db
+# Generated files
 *.tsbuildinfo
 next-env.d.ts
+
+# Operating system and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
