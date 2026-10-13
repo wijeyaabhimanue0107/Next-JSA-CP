@@ -15,7 +15,7 @@ export default function LocationMap() {
   return (
     <APIProvider apiKey={mapsKey}>
       <Map defaultCenter={position} defaultZoom={16} mapId="jsa-play-location" gestureHandling="cooperative" disableDefaultUI={false}>
-        <Marker position={position} title="Jaffna Sports Academy" />
+        <Marker position={position} title="Jaffna Sports Aademy" />
       </Map>
     </APIProvider>
   );
